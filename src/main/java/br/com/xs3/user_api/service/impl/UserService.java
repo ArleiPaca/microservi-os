@@ -1,34 +1,34 @@
-package br.com.xs3.user_api.service;
+package br.com.xs3.user_api.service.impl;
 
 
 import br.com.xs3.user_api.dto.UserDTO;
 import br.com.xs3.user_api.exception.UserNotFoundException;
 import br.com.xs3.user_api.model.User;
 import br.com.xs3.user_api.repository.UserRepository;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.log4j.Log4j2;
+import br.com.xs3.user_api.service.IService;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-@RequiredArgsConstructor
-@Log4j2
-public class UserService {
+public class UserService implements IService<UserDTO,UserDTO> {
 
     private final UserRepository userRepository;
     private final ModelMapper modelMapper;
 
-    public List<UserDTO> getAll() {
-        log.info("START - [user] - getAll ");
+    public UserService(UserRepository userRepository, ModelMapper modelMapper) {
+        this.userRepository = userRepository;
+        this.modelMapper = modelMapper;
+    }
+
+    @Override
+    public List<UserDTO> findAll() {
+
         List<User> usuarios = userRepository.findAll();
-        log.info("END - [user] - getAll ");
         return usuarios
                 .stream()
                 .map(usuario ->modelMapper.map(usuario,UserDTO.class))
@@ -36,18 +36,14 @@ public class UserService {
     }
 
 
-    public UserDTO findById(long userId) throws UserNotFoundException {
-        User usuario = userRepository.findById(userId)
-                .orElseThrow(() -> new UserNotFoundException("User  not	found"));
-        return modelMapper.map(usuario,UserDTO.class);
-    }
-
+    @Override
     public UserDTO save(UserDTO userDTO) {
-        userDTO.setDataCadastro(LocalDateTime.now());
+
         User user = userRepository.save(modelMapper.map(userDTO,User.class));
         return modelMapper.map(user,UserDTO.class);
     }
 
+    @Override
     public UserDTO delete(long userId) throws UserNotFoundException {
         User user = userRepository
                 .findById(userId).orElseThrow(() -> new UserNotFoundException("User not found"));
@@ -55,25 +51,11 @@ public class UserService {
         return modelMapper.map(user,UserDTO.class);
     }
 
-    public UserDTO findByCpf(String cpf) {
-        User user = userRepository.findByCpf(cpf);
-        if (user != null) {
-            return modelMapper.map(user,UserDTO.class);
-        }
-        return null;
-    }
-
-    public List<UserDTO> queryByName(String name) {
-        List<User> usuarios = userRepository.queryByNomeLike(name);
-        return usuarios
-                .stream()
-                .map(usuario ->modelMapper.map(usuario,UserDTO.class))
-                .collect(Collectors.toList());
-
-    }
 
 
-    public UserDTO editUser(Long userId, UserDTO userDTO) throws UserNotFoundException {
+    @Override
+    public UserDTO update(Long userId, UserDTO userDTO) throws UserNotFoundException {
+
         User user = userRepository
                 .findById(userId).orElseThrow(() -> new UserNotFoundException("User Not Found"));
 
@@ -93,13 +75,36 @@ public class UserService {
         return modelMapper.map(user,UserDTO.class);
     }
 
-    public Page<UserDTO> getAllPage(Pageable page) {
+
+
+    @Override
+    public UserDTO findById(long userId) throws UserNotFoundException {
+        User usuario = userRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException("User  not	found"));
+        return modelMapper.map(usuario,UserDTO.class);
+    }
+
+    @Override
+    public Page<UserDTO> findAll(Pageable page) {
         Page<User> users
                 = userRepository.findAll(page);
 
         return	users
                 .map(user ->modelMapper.map(user,UserDTO.class));
 
+    }
 
+
+    public List<UserDTO> findByCpf(String cpf)  {
+        List<User> users = userRepository.findByCpf(cpf);
+        return users.stream().map(u -> modelMapper.map(u,UserDTO.class)).collect(Collectors.toList());
+    }
+
+    public List<UserDTO> queryByName(String name) {
+        List<User> usuarios = userRepository.queryByNomeLike(name);
+        return usuarios
+                .stream()
+                .map(usuario ->modelMapper.map(usuario,UserDTO.class))
+                .collect(Collectors.toList());
     }
 }

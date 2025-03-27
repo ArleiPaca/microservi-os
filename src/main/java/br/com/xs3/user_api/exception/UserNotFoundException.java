@@ -8,10 +8,13 @@ import org.springframework.http.HttpStatus;
 @Getter
 @Setter
 public final class UserNotFoundException extends Throwable{
+
     private final String message;
 
     public UserNotFoundException(String message) {
         super(message);
         this.message = message;
     }
+
+
 }
