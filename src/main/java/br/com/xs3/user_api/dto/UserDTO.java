@@ -16,13 +16,14 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public  class UserDTO	{
     private long	id;
-    @NotBlank(message	=	"Nome	é	obrigatório")
+
+    @NotBlank(message = "{nome.required}")
     private	String	nome;
-    @NotBlank(message	=	"CPF	é	obrigatório")
+    @NotBlank(message = "{cpf.required}")
     private	String	cpf;
     private	String	endereco;
-    @NotBlank(message	=	"E-mail	é	obrigatório")
-    @Email(message	=	"E-mail	inváldo")
+    @NotBlank
+    @Email(message = "{email.required}")
     private	String	email;
     private	String	telefone;
     private	LocalDateTime	dataCadastro;

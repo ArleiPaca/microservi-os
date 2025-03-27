@@ -29,7 +29,7 @@ public interface IService<T,X> {
     List<T> findAll();
 
     @Transactional
-    T delete(long userId) throws UserNotFoundException;
+    void delete(long userId) throws UserNotFoundException;
 
     @Transactional
     T findById(long userId) throws UserNotFoundException;
