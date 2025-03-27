@@ -8,6 +8,7 @@ import br.com.xs3.user_api.swagger.UserSwagger;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -17,13 +18,11 @@ import java.util.List;
 @RestController
 @RequestMapping("/user")
 @Tag(name = "Usuarios")
+@RequiredArgsConstructor
 public class UserController {
 
 
     private final UserService userService;
-    public UserController(UserService userService) {
-        this.userService = userService;
-    }
 
 
     @GetMapping

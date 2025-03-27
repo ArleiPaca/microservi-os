@@ -2,8 +2,10 @@ package br.com.xs3.user_api.service;
 
 import br.com.xs3.user_api.dto.UserDTO;
 import br.com.xs3.user_api.exception.UserNotFoundException;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import jakarta.validation.Valid;
@@ -11,6 +13,8 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 
 import java.util.List;
+
+
 public interface IService<T,X> {
 
 

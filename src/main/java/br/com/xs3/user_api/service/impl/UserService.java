@@ -6,6 +6,7 @@ import br.com.xs3.user_api.exception.UserNotFoundException;
 import br.com.xs3.user_api.model.User;
 import br.com.xs3.user_api.repository.UserRepository;
 import br.com.xs3.user_api.service.IService;
+import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -15,15 +16,12 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class UserService implements IService<UserDTO,UserDTO> {
 
     private final UserRepository userRepository;
     private final ModelMapper modelMapper;
 
-    public UserService(UserRepository userRepository, ModelMapper modelMapper) {
-        this.userRepository = userRepository;
-        this.modelMapper = modelMapper;
-    }
 
     @Override
     public List<UserDTO> findAll() {
@@ -50,7 +48,6 @@ public class UserService implements IService<UserDTO,UserDTO> {
         userRepository.delete(user);
         return modelMapper.map(user,UserDTO.class);
     }
-
 
 
     @Override
